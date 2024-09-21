@@ -1,35 +1,28 @@
 const admin = require('firebase-admin');
 const firebase = require('firebase/app');
 require('firebase/auth');
+const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+require('dotenv').config();
 
-// Firebase Admin SDK setup
-const serviceAccount = require('../../firebaseServiceAccount.json');
+const serviceAccount = require('../../config/firebaseServiceAccount.json');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
 const firebaseConfig = {
-  apiKey: 'your-api-key',
-  authDomain: 'your-auth-domain',
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
 };
 firebase.initializeApp(firebaseConfig);
 
-const registerUser = async (email, password, name) => {
-  try {
-    const userRecord = await admin.auth().createUser({
-      email,
-      password,
-      displayName: name,
-    });
-    return userRecord;
-  } catch (error) {
-    throw new Error('Error al registrar usuario: ' + error.message);
-  }
-};
-
 const loginUser = async (email, password) => {
   try {
-    const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+    const auth = getAuth();
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const token = await userCredential.user.getIdToken();
     return token;
   } catch (error) {
@@ -37,4 +30,4 @@ const loginUser = async (email, password) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = { loginUser };
