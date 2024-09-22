@@ -29,4 +29,18 @@ const processPayment = async (name, cardNumber, expirationDate, cvv, amount) => 
   return transaction;
 };
 
-module.exports = { processPayment };
+const getTransactions = async () => {
+    const transactionsRef = db.collection('transactions');
+    const snapshot = await transactionsRef.get();
+    const transactions = [];
+    
+    snapshot.forEach((doc) => {
+      transactions.push(doc.data());
+    });
+  
+    return transactions;
+};
+  
+module.exports = { processPayment, getTransactions };
+  
+
