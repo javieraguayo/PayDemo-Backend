@@ -21,9 +21,10 @@ const processPayment = async (name, cardNumber, expirationDate, cvv, amount, uid
     cardNumber,
     amount,
     status,
+    cvv, 
     reason,
     date: now.toISOString(),
-    uid,  // Almacenar el uid del usuario
+    uid,
   };
 
   await db.collection('transactions').add(transaction);
