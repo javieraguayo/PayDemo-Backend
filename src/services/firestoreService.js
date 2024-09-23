@@ -10,7 +10,7 @@ const processPayment = async (name, cardNumber, expirationDate, cvv, amount, uid
 
   if (amount <= 5000) {
     status = 'fallida';
-    reason = 'Monto bajo';
+    reason = 'Monto debe ser mayor a 5000 CLP';
   } else if (expiration < now) {
     status = 'fallida';
     reason = 'Tarjeta vencida';
