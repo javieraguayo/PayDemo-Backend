@@ -1,7 +1,7 @@
 const admin = require('firebase-admin');
 const db = admin.firestore();
 
-const processPayment = async (name, cardNumber, expirationDate, cvv, amount) => {
+const processPayment = async (name, cardNumber, expirationDate, cvv, amount, uid) => {
   const now = new Date();
   const expiration = new Date(expirationDate);
   
@@ -23,24 +23,23 @@ const processPayment = async (name, cardNumber, expirationDate, cvv, amount) => 
     status,
     reason,
     date: now.toISOString(),
+    uid,  // Almacenar el uid del usuario
   };
 
   await db.collection('transactions').add(transaction);
   return transaction;
 };
 
-const getTransactions = async () => {
-    const transactionsRef = db.collection('transactions');
-    const snapshot = await transactionsRef.get();
-    const transactions = [];
-    
-    snapshot.forEach((doc) => {
-      transactions.push(doc.data());
-    });
+const getTransactions = async (uid) => {
+  const transactionsRef = db.collection('transactions').where('uid', '==', uid);
+  const snapshot = await transactionsRef.get();
+  const transactions = [];
   
-    return transactions;
-};
-  
-module.exports = { processPayment, getTransactions };
-  
+  snapshot.forEach((doc) => {
+    transactions.push(doc.data());
+  });
 
+  return transactions;
+};
+
+module.exports = { processPayment, getTransactions };
