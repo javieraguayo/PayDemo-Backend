@@ -9,9 +9,9 @@ const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-app.use(authRoutes);
-app.use(paymentRoutes);
-app.use(transactionRoutes);
+app.use('/auth', authRoutes);
+app.use('/pay', paymentRoutes);
+app.use('/transactions', transactionRoutes);
 
 app.get('/', (req, res) => {
   res.send('Servidor funcionando correctamente');
