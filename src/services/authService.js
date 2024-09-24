@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const firebase = require('firebase/app');
 require('firebase/auth');
 const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
-require('dotenv').config();  // Cargar las variables de entorno
+require('dotenv').config();
 
 // Firebase Admin SDK setup
 const serviceAccount = require('../../config/firebaseServiceAccount.json');
@@ -20,7 +20,6 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-// Función para registrar un usuario
 const registerUser = async (email, password, name) => {
   try {
     const userRecord = await admin.auth().createUser({
@@ -34,7 +33,6 @@ const registerUser = async (email, password, name) => {
   }
 };
 
-// Función para el login de usuario
 const loginUser = async (email, password) => {
   try {
     const auth = getAuth();
